@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Login - CollegeFinder{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="form-container">
+    <h2 class="form-title">Login</h2>
+    <form method="POST" class="auth-form" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control") }}
+        {% for error in form.email.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-control") }}
+        {% for error in form.password.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center">
+        {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('register') }}" class="text-muted">No account? Register</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

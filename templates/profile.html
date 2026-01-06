@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Complete Profile - CollegeFinder{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+  <div class="card shadow-lg rounded-4 p-4">
+    <h3 class="mb-3" style="color: white;">Complete Your Profile</h3>
+    <p class="text-muted">Fill in your basic details and MHT-CET information</p>
+
+    <form method="POST" novalidate>
+      {{ form.hidden_tag() }}
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          {{ form.name.label(class="form-label") }}
+          {{ form.name(class="form-control", placeholder="Enter your full name") }}
+          {% for error in form.name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.phone_number.label(class="form-label") }}
+          {{ form.phone_number(class="form-control", placeholder="Enter phone number") }}
+          {% for error in form.phone_number.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.dob.label(class="form-label") }}
+          {{ form.dob(class="form-control") }}
+          {% for error in form.dob.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.gender.label(class="form-label") }}
+          {{ form.gender(class="form-select") }}
+          {% for error in form.gender.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.category.label(class="form-label") }}
+          {{ form.category(class="form-select") }}
+          {% for error in form.category.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.home_state.label(class="form-label") }}
+          {{ form.home_state(class="form-select", id="state-select") }}
+          {% for error in form.home_state.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.district.label(class="form-label") }}
+          {{ form.district(class="form-select", id="district-select") }}
+          {% for error in form.district.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.percentile.label(class="form-label") }}
+          {{ form.percentile(class="form-control", placeholder="e.g., 95.1234") }}
+          {% for error in form.percentile.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Previous</a>
+        <button type="submit" name="action" value="next" class="btn btn-primary">Next</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(async function(){
+  const stateSelect = document.getElementById('state-select');
+  const districtSelect = document.getElementById('district-select');
+
+  let districtData = {};
+  try {
+    const resp = await fetch('{{ url_for("static", filename="districts.json") }}', {cache: "no-store"});
+    if (resp.ok) districtData = await resp.json();
+  } catch (e) {}
+
+  function populate(state){
+    if (!districtSelect) return;
+    districtSelect.innerHTML = '';
+    if (!state || !districtData[state]) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.text = 'Select a state first';
+      districtSelect.appendChild(opt);
+      return;
+    }
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.text = 'Select district';
+    districtSelect.appendChild(placeholder);
+
+    districtData[state].forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.text = d;
+      districtSelect.appendChild(opt);
+    });
+
+    const serverDistrict = "{{ form.district.data|default('') }}";
+    if (serverDistrict) {
+      for (let opt of districtSelect.options){
+        if (opt.value === serverDistrict) { opt.selected = true; break; }
+      }
+    }
+  }
+
+  stateSelect && stateSelect.addEventListener('change', e => populate(e.target.value));
+  populate(stateSelect && stateSelect.value);
+})();
+</script>
+
+{% endblock %}

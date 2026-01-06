@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Home - CollegeFinder{% endblock %}
+{% block main_class %}container mt-5 pt-5{% endblock %}
+
+{% block content %}
+<div class="text-center my-5">
+  <h1 class="display-5 fw-bold">Find the best colleges for your CET percentile</h1>
+  <p class="lead text-muted mt-3">Quick, personalised recommendations based on your profile and preferences.</p>
+
+  <div class="d-flex justify-content-center mt-4 gap-3">
+    <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Login</a>
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Register</a>
+  </div>
+</div>
+
+<div class="row gy-4 mt-5">
+  <div class="col-md-4">
+    <div class="card p-4 h-100">
+      <h5 style="color: white;">Smart Matching</h5>
+      <p class="text-muted small">Get personalized lists based on your CET percentile and category.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-4 h-100">
+      <h5 style="color: white;">Fast & Easy</h5>
+      <p class="text-muted small">Filter hundreds of colleges in seconds with a few clicks.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-4 h-100">
+      <h5 style="color: white;">Accurate Results</h5>
+      <p class="text-muted small">Upload the latest cutoff CSVs to keep recommendations up-to-date.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

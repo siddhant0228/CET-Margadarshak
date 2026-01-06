@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Recommendations - CollegeFinder{% endblock %}
+{% block main_class %}container mt-5 pt-5{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg rounded-4 p-4 recommendation-card">
+
+  <h3 class="fw-bold mb-2" style="color: white;">Recommended Colleges</h3>
+  <p class="text-muted mb-4">
+    Based on your profile
+    {% if user and user.category %} ({{ user.category }}){% endif %}
+    {% if session.preferred_colleges %} and your preferences{% endif %}.
+  </p>
+
+  {% if recommendation and recommendation|length > 0 %}
+  <div class="table-responsive">
+    <table class="table recommendation-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>College</th>
+          <th>Branch</th>
+          <th>Round</th>
+          <th>Cutoff</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in recommendation %}
+        <tr>
+          <td class="text-muted">{{ loop.index }}</td>
+          <td class="fw-semibold">{{ rec.college_name }}</td>
+          <td>{{ rec.branch_name }}</td>
+          <td>{{ rec.round or '-' }}</td>
+          <td>
+            {% if rec.cutoff is not none %}
+              {{ "%.3f"|format(rec.cutoff) }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>
+            {% if rec.status == 'Safe' %}
+              <span class="badge badge-safe">Safe</span>
+            {% elif rec.status == 'Reach' %}
+              <span class="badge badge-reach">Reach</span>
+            {% else %}
+              <span class="badge badge-unlikely">Unlikely</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="alert alert-info">No recommendations found.</div>
+  {% endif %}
+
+  <div class="d-flex justify-content-between mt-4">
+    <a href="{{ url_for('preferences') }}" class="btn btn-outline-secondary">← Back</a>
+    <a href="{{ url_for('profile') }}" class="btn btn-primary">Edit Profile</a>
+  </div>
+
+</div>
+{% endblock %}

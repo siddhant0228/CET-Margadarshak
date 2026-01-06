@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-WTF
+Flask-Session
+Werkzeug
+python-dotenv
+psycopg2-binary
+pandas
+gunicorn
