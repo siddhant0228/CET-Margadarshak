@@ -7,3 +7,5 @@ python-dotenv
 psycopg2-binary
 pandas
 gunicorn
+psycopg2
+email_validator
